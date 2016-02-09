@@ -26,6 +26,17 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
 
 
     public MainActivityFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment UnfollowsFragment.
+     */
+    public static MainActivityFragment newInstance() {
+        return new MainActivityFragment();
     }
 
     @Override
