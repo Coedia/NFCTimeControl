@@ -17,7 +17,10 @@
 package es.oneoctopus.nfctimecontrol.fragments;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,17 +31,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
 
 import es.oneoctopus.nfctimecontrol.R;
 import es.oneoctopus.nfctimecontrol.other.Constants;
 
 
 public class MainActivityFragment extends Fragment implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
-    private GoogleMap map;
     private SupportMapFragment mapView;
+    private Location loc;
 
 
     public MainActivityFragment() {
@@ -64,6 +71,7 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mapView = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_view);
         getLocationPermissions();
     }
 
@@ -102,6 +110,7 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
                 disableLocation();
         }
 
+
     }
 
     private void disableLocation() {
@@ -110,10 +119,41 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
 
     private void getLastKnownLocation() {
 
+        try {
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            List<String> providers = locationManager.getProviders(true);
+            Location bestLocation = null;
+            for (String provider : providers) {
+                Location l = locationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
+                }
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location
+                    bestLocation = l;
+                }
+            }
+
+            loc = bestLocation;
+
+            mapView.getMapAsync(this);
+        } catch (SecurityException sec) {
+            loc = null;
+        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleMap.setBuildingsEnabled(true);
+        googleMap.setIndoorEnabled(true);
+        googleMap.getUiSettings().setAllGesturesEnabled(false);
+        if(loc != null) {
+            //noinspection MissingPermission - already checked
+            googleMap.setMyLocationEnabled(true);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(loc.getLatitude(), loc.getLongitude())));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+        }
 
     }
 }
