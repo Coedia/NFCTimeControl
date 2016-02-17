@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import es.oneoctopus.nfctimecontrol.R;
+import es.oneoctopus.nfctimecontrol.dialogs.NewTagDialog;
 import es.oneoctopus.nfctimecontrol.fragments.MainActivityFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,8 +44,12 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                NewTagDialog dialog = new NewTagDialog();
+                dialog.show(getSupportFragmentManager(), "newtag");
+
+         /*       Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
             }
         });
     }

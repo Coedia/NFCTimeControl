@@ -17,4 +17,9 @@
 <resources>
     <string name="app_name">NFCTimeControl</string>
     <string name="action_settings">Settings</string>
+    <string name="set_venues_name">Set venue\'s name...</string>
+    <string name="insertplacename">Insert name here</string>
+    <string name="keepitshort">Keep it short!</string>
+    <string name="done">Done</string>
+    <string name="insert_valid_name">Insert a valid name</string>
 </resources>
