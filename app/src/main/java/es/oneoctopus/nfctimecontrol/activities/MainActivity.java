@@ -16,6 +16,10 @@
 
 package es.oneoctopus.nfctimecontrol.activities;
 
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +28,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -38,10 +43,17 @@ import es.oneoctopus.nfctimecontrol.fragments.StatsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private NfcAdapter nfcAdapter;
+    private PendingIntent nfcPendingIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -115,5 +127,36 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void enableForegroundMode(){
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        IntentFilter[] writeTagFilters = new IntentFilter[] {tagDetected};
+        nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, writeTagFilters, null);
+    }
+
+    public void disableForegroundMode(){
+        nfcAdapter.disableForegroundDispatch(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        enableForegroundMode();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        disableForegroundMode();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)){
+            // TODO handle tag when detected
+        }
     }
 }
