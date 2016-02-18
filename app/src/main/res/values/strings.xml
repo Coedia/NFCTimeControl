@@ -22,4 +22,10 @@
     <string name="keepitshort">Keep it short!</string>
     <string name="done">Done</string>
     <string name="insert_valid_name">Insert a valid name</string>
+    <string name="main">Main</string>
+    <string name="stats">Stats</string>
+    <string name="places">Places</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -25,9 +25,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+
 import es.oneoctopus.nfctimecontrol.R;
 import es.oneoctopus.nfctimecontrol.dialogs.NewTagDialog;
 import es.oneoctopus.nfctimecontrol.fragments.MainActivityFragment;
+import es.oneoctopus.nfctimecontrol.fragments.PlacesFragment;
+import es.oneoctopus.nfctimecontrol.fragments.StatsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Initialize NavigationDrawer using MaterialDrawer library
+        initializeNavigationDrawer(toolbar);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, MainActivityFragment.newInstance()).commit();
 
@@ -52,6 +62,37 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();*/
             }
         });
+    }
+
+    private void initializeNavigationDrawer(Toolbar toolbar) {
+
+        new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.main).withIcon(R.drawable.ic_home_black_24dp),
+                        new PrimaryDrawerItem().withName(R.string.stats).withIcon(R.drawable.ic_assessment_black_24dp),
+                        new PrimaryDrawerItem().withName(R.string.places).withIcon(R.drawable.ic_room_black_24dp)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        switch (position){
+                            case 0:
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, MainActivityFragment.newInstance()).commit();
+                                return true;
+                            case 1:
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, StatsFragment.newInstance()).commit();
+                                return true;
+                            case 2:
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, PlacesFragment.newInstance()).commit();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                })
+        .build();
     }
 
     @Override
