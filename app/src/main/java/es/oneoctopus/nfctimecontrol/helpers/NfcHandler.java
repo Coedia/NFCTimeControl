@@ -63,7 +63,7 @@ public class NfcHandler {
      * @param name the place name
      * @return true if the operation is successful, false otherwise
      */
-    private boolean writeTag(Tag tag, String name){
+    public boolean writeTag(Tag tag, String name){
         Ndef ndefTag = Ndef.get(tag);
 
         // Check if the tag is formatted. If it is not, format it

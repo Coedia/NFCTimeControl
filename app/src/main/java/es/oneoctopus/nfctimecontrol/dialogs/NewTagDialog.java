@@ -16,6 +16,7 @@
 
 package es.oneoctopus.nfctimecontrol.dialogs;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -29,14 +30,13 @@ import android.widget.Toast;
 
 import es.oneoctopus.nfctimecontrol.R;
 
-/**
- * Created by root on 17/02/16.
- */
 public class NewTagDialog extends DialogFragment {
+    private WriteToNFC activity;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        activity = (WriteToNFC) getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.set_venues_name));
         final View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_add_venue_name, null);
@@ -47,14 +47,24 @@ public class NewTagDialog extends DialogFragment {
                 EditText name = (EditText) layout.findViewById(R.id.name);
                 String venueName = name.getText().toString();
                 if (!venueName.trim().equals("")){
-                    // TODO: 17/02/16 escribir tag ya que ha escrito un nomnbre válido
+                    // Send the name to the main activity so it gets written in the NFC tag
+                    activity.setNameToWrite(venueName);
                 }else{
                     Toast.makeText(getActivity(), R.string.insert_valid_name, Toast.LENGTH_LONG).show();
-
                 }
             }
         });
 
         return builder.create();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activity = null;
+    }
+
+    public interface WriteToNFC {
+        void setNameToWrite(String nameToWrite);
     }
 }

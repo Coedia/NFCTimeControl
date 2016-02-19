@@ -20,6 +20,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,11 +41,14 @@ import es.oneoctopus.nfctimecontrol.dialogs.NewTagDialog;
 import es.oneoctopus.nfctimecontrol.fragments.MainActivityFragment;
 import es.oneoctopus.nfctimecontrol.fragments.PlacesFragment;
 import es.oneoctopus.nfctimecontrol.fragments.StatsFragment;
+import es.oneoctopus.nfctimecontrol.helpers.NfcHandler;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NewTagDialog.WriteToNFC{
 
     private NfcAdapter nfcAdapter;
     private PendingIntent nfcPendingIntent;
+    String placeNameToWrite = "";
+    private NfcHandler nfcHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        nfcHandler = new NfcHandler(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -156,7 +161,23 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)){
-            // TODO handle tag when detected
+
+            // Get the NFC tag from the intent
+            Tag discoveredTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+            // The user has just wrote a new place name, so write it to the NFC tag
+            if(!placeNameToWrite.equals("")) {
+                nfcHandler.writeTag(discoveredTag, placeNameToWrite);
+                placeNameToWrite = "";
+            }
+
+
+            // TODO handle rest of cases
         }
+    }
+
+    @Override
+    public void setNameToWrite(String nameToWrite) {
+        placeNameToWrite = nameToWrite;
     }
 }
