@@ -37,11 +37,7 @@ public class NfcHandler {
         this.context = context;
     }
 
-    private void deleteTag(){
-
-    }
-
-    private Tag formatTag(Tag tag){
+    public Tag formatTag(Tag tag){
         NdefFormatable formatableTag = NdefFormatable.get(tag);
         if(formatableTag != null){
             try{

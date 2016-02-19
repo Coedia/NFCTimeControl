@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
     private PendingIntent nfcPendingIntent;
     String placeNameToWrite = "";
     private NfcHandler nfcHandler;
+    private boolean erase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,6 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
 
                 NewTagDialog dialog = new NewTagDialog();
                 dialog.show(getSupportFragmentManager(), "newtag");
-
-         /*       Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
             }
         });
     }
@@ -127,8 +125,9 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.erase_tag) {
+            erase = true;
+            //TODO Show erase mode
         }
 
         return super.onOptionsItemSelected(item);
@@ -169,8 +168,11 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
             if(!placeNameToWrite.equals("")) {
                 nfcHandler.writeTag(discoveredTag, placeNameToWrite);
                 placeNameToWrite = "";
+            }else if (erase){
+                // The user asked to erase the tag via the menu button
+                nfcHandler.formatTag(discoveredTag);
+                erase = false;
             }
-
 
             // TODO handle rest of cases
         }
