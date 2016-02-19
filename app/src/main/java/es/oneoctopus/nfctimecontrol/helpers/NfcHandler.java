@@ -16,9 +16,98 @@
 
 package es.oneoctopus.nfctimecontrol.helpers;
 
-/**
- * Created by root on 18/02/16.
- */
+import android.content.Context;
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
+import android.nfc.tech.NdefFormatable;
+import android.widget.Toast;
+
+import java.io.IOException;
+
+import es.oneoctopus.nfctimecontrol.R;
+import es.oneoctopus.nfctimecontrol.other.Constants;
+
 public class NfcHandler {
+    private Context context;
+
+    public NfcHandler(Context context) {
+        this.context = context;
+    }
+
+    private void deleteTag(){
+
+    }
+
+    private Tag formatTag(Tag tag){
+        NdefFormatable formatableTag = NdefFormatable.get(tag);
+        if(formatableTag != null){
+            try{
+                NdefRecord emptyRecord = new NdefRecord(NdefRecord.TNF_EMPTY, null, null, null);
+                NdefMessage emptyMessage = new NdefMessage(emptyRecord);
+                formatableTag.connect();
+                formatableTag.format(emptyMessage);
+                return formatableTag.getTag();
+            } catch (FormatException | IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else return null;
+    }
+
+    /**
+     * Write the desired data into the scanned NFC tag.
+     * @param tag scanned tag
+     * @param name the place name
+     * @return true if the operation is successful, false otherwise
+     */
+    private boolean writeTag(Tag tag, String name){
+        Ndef ndefTag = Ndef.get(tag);
+
+        // Check if the tag is formatted. If it is not, format it
+        if(ndefTag == null)
+            ndefTag = Ndef.get(formatTag(tag));
+
+        // The format wasn't successful, so we abort the mission
+        if(ndefTag == null)
+            return false;
+
+        // Check if the NFC tag is writable
+        if(!ndefTag.isWritable()){
+            Toast.makeText(context, R.string.nfc_tag_not_writable, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        // Create a record so the device knows what application should handle the tag
+        NdefRecord appRecord = NdefRecord.createApplicationRecord(context.getPackageName());
+        // Create a mimetype with the package name and the place name
+        byte[] placeNameBytes = name.getBytes();
+        NdefRecord dataRecord = NdefRecord.createMime(Constants.NFC_MIME_TYPE, placeNameBytes);
+        // Create the definitive NFC message
+        NdefMessage message = new NdefMessage(new NdefRecord[] {appRecord, dataRecord});
+
+        // Check if there is enough space
+        int messageSize = message.toByteArray().length;
+        if(ndefTag.getMaxSize() < messageSize){
+            Toast.makeText(context, R.string.nfc_tag_no_space, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        // Try to format and write the data in the tag
+        try{
+            ndefTag.connect();
+            ndefTag.writeNdefMessage(message);
+            ndefTag.close();
+            Toast.makeText(context, R.string.nfc_tag_successful_write, Toast.LENGTH_LONG).show();
+            return true;
+        } catch (FormatException | IOException e) {
+            e.printStackTrace();
+            Toast.makeText(context, R.string.nfc_tag_error_writing, Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
+
 
 }

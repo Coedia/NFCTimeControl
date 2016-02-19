@@ -19,4 +19,6 @@ package es.oneoctopus.nfctimecontrol.other;
 public class Constants {
 
     public final static int PERMISSION_LOCATION = 192;
+    public final static String NFC_MIME_TYPE = "application/es.oneoctopus.nfctimecontrol";
+
 }

@@ -60,10 +60,8 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="application/com.naroh.nfctimecontrol" />
+                <data android:mimeType="application/es.oneoctopus.nfctimecontrol" />
             </intent-filter>
         </activity>
     </application>
