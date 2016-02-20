@@ -65,7 +65,6 @@ public class NewTagDialog extends DialogFragment {
     }
 
     public interface WriteToNFC {
-        // TODO Show write mode
         void setNameToWrite(String nameToWrite);
     }
 }

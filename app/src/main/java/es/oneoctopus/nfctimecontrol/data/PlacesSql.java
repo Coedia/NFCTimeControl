@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class PlacesSql extends SQLiteOpenHelper {
 
-    String creation = "CREATE TABLE places (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, placename varchar(255) NOT NULL, indate varchar(255) NOT NULL, outdate varchar(255), hours int)";
+    String creation = "CREATE TABLE places (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, placename varchar(255) NOT NULL, checkin varchar(255) NOT NULL, checkout varchar(255), hours int)";
 
     public PlacesSql(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
