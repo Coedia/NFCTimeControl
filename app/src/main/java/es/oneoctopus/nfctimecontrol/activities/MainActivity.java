@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
     String placeNameToWrite = "";
     private NfcHandler nfcHandler;
     private boolean erase;
+    private Drawer drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
 
     private void initializeNavigationDrawer(Toolbar toolbar) {
 
-        new DrawerBuilder()
+        drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
@@ -95,16 +96,17 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
                         switch (position){
                             case 0:
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, MainActivityFragment.newInstance()).commit();
-                                return true;
+                                break;
                             case 1:
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, StatsFragment.newInstance()).commit();
-                                return true;
+                                break;
                             case 2:
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, PlacesFragment.newInstance()).commit();
-                                return true;
                             default:
-                                return false;
+                                break;
                         }
+                        drawer.closeDrawer();
+                        return true;
                     }
                 })
         .build();

@@ -23,5 +23,5 @@
         android:orderInCategory="100"
         android:title="@string/erase_tag"
         android:icon="@drawable/ic_cancel_white_24dp"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>
