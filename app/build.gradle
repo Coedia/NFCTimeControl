@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId "es.oneoctopus.nfctimecontrol"
-        minSdkVersion 23
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -52,7 +52,7 @@ android {
             versionName defaultConfig.versionName + ' dev'
         }
         prod {
-            minSdkVersion 23
+            minSdkVersion 16
             applicationId 'es.oneoctopus.nfctimecontrol'
             versionCode defaultConfig.versionCode + 1
             targetSdkVersion 23

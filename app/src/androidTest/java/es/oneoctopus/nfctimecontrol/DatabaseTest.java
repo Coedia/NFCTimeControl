@@ -104,4 +104,10 @@ public class DatabaseTest {
     @Test public void test8_isCheckOpenSecond(){
         assertTrue(db.isCheckOpen("testplace"));
     }
+
+    @Test
+    public void test9_openChecks(){
+        db.check(DateTime.now(), "testnew");
+        assertThat(db.getOpenChecks().size(), is(2));
+    }
 }
