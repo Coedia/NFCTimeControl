@@ -32,7 +32,6 @@ public class PlacesSql extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(creation);
-
     }
 
     @Override
