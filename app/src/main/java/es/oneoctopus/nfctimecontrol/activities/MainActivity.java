@@ -36,7 +36,10 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import org.joda.time.DateTime;
+
 import es.oneoctopus.nfctimecontrol.R;
+import es.oneoctopus.nfctimecontrol.data.PlacesDAO;
 import es.oneoctopus.nfctimecontrol.dialogs.NewTagDialog;
 import es.oneoctopus.nfctimecontrol.fragments.MainActivityFragment;
 import es.oneoctopus.nfctimecontrol.fragments.PlacesFragment;
@@ -176,7 +179,14 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
                 erase = false;
             }
 
-            // TODO handle rest of cases
+            String name = nfcHandler.readTag(intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES));
+            if (name != null){
+                PlacesDAO db = new PlacesDAO(this);
+                db.check(DateTime.now(), name);
+                Toast.makeText(this,"NFC Tag read",Toast.LENGTH_LONG).show();
+
+            }else
+                Toast.makeText(MainActivity.this, "Error trying to read NFC tag", Toast.LENGTH_LONG).show();
         }
     }
 

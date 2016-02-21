@@ -23,12 +23,19 @@ import android.nfc.NdefRecord;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
+import org.ndeftools.Message;
+import android.os.Parcelable;
 import android.widget.Toast;
+
+import org.ndeftools.MimeRecord;
+import org.ndeftools.Record;
+import org.ndeftools.UnsupportedRecord;
 
 import java.io.IOException;
 
 import es.oneoctopus.nfctimecontrol.R;
 import es.oneoctopus.nfctimecontrol.other.Constants;
+import es.oneoctopus.nfctimecontrol.other.IterableMessage;
 
 public class NfcHandler {
     private Context context;
@@ -103,7 +110,42 @@ public class NfcHandler {
             return false;
         }
     }
+    public String readTag(Parcelable[] data){
+        if(data == null)
+            return null;
+        NdefMessage[] messages = new NdefMessage[data.length];
+        for(int i=0; i<data.length; i++)
+            messages[i] = (NdefMessage) data[i];
+        
+        if (messages.length > 0) {
+            IterableMessage message = new IterableMessage();
+            for (NdefMessage m : messages) {
+                for (NdefRecord record : m.getRecords()) {
+                    try {
+                        message.add(Record.parse(record));
+                    } catch (FormatException e) {
+                        e.printStackTrace();
+                        // if record is unsuported or corrupted, keep it.
+                        message.add(UnsupportedRecord.parse(record));
+                    }
 
+                }
+
+            }
+            return parse(message);
+        }else
+            return null;
+    }
+
+    private String parse(IterableMessage message) {
+        if (message.size() == 0)
+            return null;
+        for (Record r : message.getAllRecords()) {
+            if (r instanceof MimeRecord)
+                return new String(((MimeRecord) r).getData());
+        }
+        return null;
+    }
 
 
 }
