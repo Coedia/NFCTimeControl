@@ -42,13 +42,21 @@ public class PlacesDAO {
         this.db = this.sql.getWritableDatabase();
     }
 
-    public List<String> getPlaces(){
+    public List<String> getPlaceNames(){
         Cursor cursor = db.rawQuery("SELECT DISTINCT placename FROM places", null);
         List<String> result = new ArrayList<>();
         while (cursor.moveToNext())
             result.add(cursor.getString(cursor.getColumnIndex("placename")));
         cursor.close();
         return result;
+    }
+    public int getPlacesCount(){
+        String sql = "SELECT DISTINCT placename FROM places;";
+        SQLiteStatement statement = db.compileStatement(sql);
+        Cursor cursor = db.query(true, "places", new String[] {"placename"}, "", null, null, null, null, null);
+        int size = cursor.getCount();
+        cursor.close();
+        return size;
     }
 
     public boolean isEmpty(){

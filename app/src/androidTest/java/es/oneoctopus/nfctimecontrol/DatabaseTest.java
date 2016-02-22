@@ -66,34 +66,34 @@ public class DatabaseTest {
     @Test
     public void test2_firstInsertDataIn() throws Exception{
         db.check(DateTime.now(), "testplace");
-        List<String> places = db.getPlaces();
+        List<String> places = db.getPlaceNames();
         assertThat(places.size(), is(1));
     }
 
     @Test
     public void test3_firstInsertDataOut() throws Exception{
         db.check(DateTime.now(), "testplace");
-        List<String> places = db.getPlaces();
+        List<String> places = db.getPlaceNames();
         assertThat(places.size(), is(1));
     }
 
     @Test
     public void test4_secondInsertDataIn(){
         db.check(DateTime.now(), "testplace");
-        List<String> places = db.getPlaces();
+        List<String> places = db.getPlaceNames();
         assertThat(places.size(), is(1));
     }
 
     @Test
     public void test5_thirdInsertDataIn(){
         db.check(DateTime.now(), "testplace_second");
-        List<String> places = db.getPlaces();
+        List<String> places = db.getPlaceNames();
         assertThat(places.size(), is(2));
     }
 
     @Test public void test6_secondInsertDataOut(){
         db.check(DateTime.now(), "testplace_second");
-        List<String> places = db.getPlaces();
+        List<String> places = db.getPlaceNames();
         assertThat(places.size(), is(2));
     }
 
