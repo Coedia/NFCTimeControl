@@ -152,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
     protected void onResume() {
         super.onResume();
         enableForegroundMode();
+        // Detect if the intent is a NFC one - when scanning a tag while the activity is in
+        // the background
+        detectIfNfcIntent(getIntent());
     }
 
     @Override
@@ -163,8 +166,13 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        // Detect if the intent is a NFC one - when scanning a tap while the activity is on top
+        detectIfNfcIntent(intent);
+    }
 
-        if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)){
+    public void detectIfNfcIntent(Intent intent){
+        if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)
+                || intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)){
 
             // Get the NFC tag from the intent
             Tag discoveredTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);

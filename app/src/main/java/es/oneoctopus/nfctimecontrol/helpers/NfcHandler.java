@@ -88,8 +88,15 @@ public class NfcHandler {
         // Create a mimetype with the package name and the place name
         byte[] placeNameBytes = name.getBytes();
         NdefRecord dataRecord = NdefRecord.createMime(Constants.NFC_MIME_TYPE, placeNameBytes);
-        // Create the definitive NFC message
-        NdefMessage message = new NdefMessage(new NdefRecord[] {appRecord, dataRecord});
+
+        /*
+            Create the definitive NFC message
+            Write the data record before the AAR so Android can read the tag when scanned
+            even if the activity is not active.
+            Reference: http://stackoverflow.com/a/25510642/1376140
+        */
+
+        NdefMessage message = new NdefMessage(new NdefRecord[] {dataRecord, appRecord});
 
         // Check if there is enough space
         int messageSize = message.toByteArray().length;
