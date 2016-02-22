@@ -23,7 +23,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -185,16 +184,16 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
                 // The user asked to erase the tag via the menu button
                 nfcHandler.formatTag(discoveredTag);
                 erase = false;
+            }else {
+                String name = nfcHandler.readTag(intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES));
+                if (name != null) {
+                    PlacesDAO db = new PlacesDAO(this);
+                    db.check(DateTime.now(), name);
+                    Toast.makeText(this, "NFC Tag read", Toast.LENGTH_LONG).show();
+
+                } else
+                    Toast.makeText(MainActivity.this, "Error trying to read NFC tag", Toast.LENGTH_LONG).show();
             }
-
-            String name = nfcHandler.readTag(intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES));
-            if (name != null){
-                PlacesDAO db = new PlacesDAO(this);
-                db.check(DateTime.now(), name);
-                Toast.makeText(this,"NFC Tag read",Toast.LENGTH_LONG).show();
-
-            }else
-                Toast.makeText(MainActivity.this, "Error trying to read NFC tag", Toast.LENGTH_LONG).show();
         }
     }
 
