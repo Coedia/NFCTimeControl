@@ -18,6 +18,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.MainActivityFragment">
 
     <fragment
@@ -35,7 +36,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/instructions"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/semi_transparent_white"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:visibility="gone">
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,25 +48,58 @@
         android:id="@+id/action"
         android:text="Scan a tag\nto check in"
         android:textSize="48sp"
-        android:background="@color/semi_transparent_white"
         android:fontFamily="sans-serif-light"
         android:textColor="@color/primary_dark"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"/>
+        android:padding="8dp"/>
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_height="match_parent"
-        android:background="@color/semi_transparent_white"
-        android:layout_marginRight="8dp"
-        android:src="@drawable/ic_leak_add_black_24dp" />
+        android:src="@drawable/ic_leak_add_black_24dp"
+        android:padding="8dp" />
     </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@android:color/white">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You're currently at"
+            android:textColor="@color/primary_dark"
+            android:layout_marginBottom="-6dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:textColor="@color/accent"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:textSize="36sp"
+            android:layout_marginBottom="-6dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_dark"
+            android:text="for 39 minutes."/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>
