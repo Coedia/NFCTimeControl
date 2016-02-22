@@ -17,20 +17,20 @@
 <resources>
     <string name="app_name">NFCTimeControl</string>
     <string name="action_settings">Settings</string>
-    <string name="set_venues_name">Set venue\'s name...</string>
+    <string name="set_venues_name">Set a tag name...</string>
     <string name="insertplacename">Insert name here</string>
-    <string name="keepitshort">Keep it short!</string>
+    <string name="keepitshort">Keep it short! (i.e. Work, Mike\'s home...)</string>
     <string name="done">Done</string>
-    <string name="insert_valid_name">Insert a valid name</string>
+    <string name="insert_valid_name">Insert a valid tag name</string>
     <string name="main">Main</string>
     <string name="stats">Stats</string>
     <string name="places">Places</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="nfc_tag_not_writable">The NFC tag is not writable</string>
     <string name="nfc_tag_no_space">The tag doesn\'t have enough space</string>
-    <string name="nfc_tag_successful_write">Place name registered in the NFC tag</string>
+    <string name="nfc_tag_successful_write">Place name successfully registered in the NFC tag</string>
     <string name="nfc_tag_error_writing">Error writing to tag</string>
     <string name="erase_tag">Erase tag</string>
 </resources>
