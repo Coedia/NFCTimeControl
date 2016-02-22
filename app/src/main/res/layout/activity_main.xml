@@ -42,6 +42,7 @@
         android:layout_height="match_parent"
         android:id="@+id/container"
         tools:layout="@layout/fragment_main"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="0dp"
         android:layout_below="@+id/toolbar" />

@@ -18,18 +18,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MainActivityFragment"
-    tools:showIn="@layout/activity_main">
+    tools:context=".fragments.MainActivityFragment">
 
     <fragment
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/map_view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/instructions"
+        android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/action"
+        android:text="Scan a tag\nto check in"
+        android:textSize="48sp"
+        android:background="@color/semi_transparent_white"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/primary_dark"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="match_parent"
+        android:background="@color/semi_transparent_white"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_leak_add_black_24dp" />
+    </LinearLayout>
 
 </RelativeLayout>

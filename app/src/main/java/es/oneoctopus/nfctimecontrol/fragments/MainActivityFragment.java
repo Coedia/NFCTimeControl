@@ -148,6 +148,7 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
         googleMap.setBuildingsEnabled(true);
         googleMap.setIndoorEnabled(true);
         googleMap.getUiSettings().setAllGesturesEnabled(false);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         if(loc != null) {
             //noinspection MissingPermission - already checked
             googleMap.setMyLocationEnabled(true);
