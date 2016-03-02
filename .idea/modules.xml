@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NFCTimeControl.iml" filepath="$PROJECT_DIR$/NFCTimeControl.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/nfc-time-control.iml" filepath="$PROJECT_DIR$/nfc-time-control.iml" />
     </modules>
   </component>
 </project>
