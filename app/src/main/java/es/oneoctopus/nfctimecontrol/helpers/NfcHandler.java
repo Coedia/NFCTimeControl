@@ -23,15 +23,16 @@ import android.nfc.NdefRecord;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
-import org.ndeftools.Message;
 import android.os.Parcelable;
 import android.widget.Toast;
 
 import org.ndeftools.MimeRecord;
 import org.ndeftools.Record;
 import org.ndeftools.UnsupportedRecord;
+import org.ndeftools.externaltype.AndroidApplicationRecord;
 
 import java.io.IOException;
+import java.util.List;
 
 import es.oneoctopus.nfctimecontrol.R;
 import es.oneoctopus.nfctimecontrol.other.Constants;
@@ -147,12 +148,12 @@ public class NfcHandler {
     private String parse(IterableMessage message) {
         if (message.size() == 0)
             return null;
-        for (Record r : message.getAllRecords()) {
-            if (r instanceof MimeRecord)
-                return new String(((MimeRecord) r).getData());
-        }
-        return null;
+
+        List<Record> records = message.getAllRecords();
+        if(records.get(0) instanceof MimeRecord && records.get(1) instanceof AndroidApplicationRecord ){
+            if(((AndroidApplicationRecord) records.get(1)).getPackageName().equals(Constants.PACKAGE_NAME))
+                return new String((((MimeRecord) records.get(0)).getData()));
+            else return null;
+        } else return null;
     }
-
-
 }

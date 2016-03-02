@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-package es.oneoctopus.nfctimecontrol.other;
+package es.oneoctopus.nfctimecontrol.activities;
 
-public class Constants {
-
-    public final static int PERMISSION_LOCATION = 192;
-    public final static String NFC_MIME_TYPE = "application/es.oneoctopus.nfctimecontrol";
-    public final static String PACKAGE_NAME = "es.oneoctopus.nfctimecontrol";
-
+public class PlaceActivity {
 }

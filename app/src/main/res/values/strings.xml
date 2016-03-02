@@ -33,6 +33,7 @@
     <string name="nfc_tag_successful_write">Place name successfully registered in the NFC tag</string>
     <string name="nfc_tag_error_writing">Error writing to tag</string>
     <string name="erase_tag">Erase tag</string>
+    <string name="been_here_times">You\'ve been here %1$d times</string>
     <string name="scan_a_tag_nto_check_in">Scan a tag\nto check in</string>
     <string name="you_re_currently_at">You\'re currently at</string>
     <string name="for_hours_minutes">for %1$d minutes.</string>
