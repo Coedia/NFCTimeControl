@@ -27,9 +27,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,13 +43,18 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 
 import es.oneoctopus.nfctimecontrol.R;
+import es.oneoctopus.nfctimecontrol.data.PlacesDAO;
 import es.oneoctopus.nfctimecontrol.other.Constants;
 
 
 public class MainActivityFragment extends Fragment implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
     private SupportMapFragment mapView;
     private Location loc;
-
+    private LinearLayout instructions;
+    private TextView action;
+    private CardView card;
+    private TextView placeName;
+    private TextView placeTime;
 
     public MainActivityFragment() {
         // Required empty public constructor
@@ -73,6 +81,13 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
         super.onViewCreated(view, savedInstanceState);
         mapView = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_view);
         getLocationPermissions();
+
+        instructions = (LinearLayout) view.findViewById(R.id.instructions);
+        action = (TextView) view.findViewById(R.id.action);
+        card = (CardView) view.findViewById(R.id.cardview);
+        placeName = (TextView) view.findViewById(R.id.place_name);
+        placeTime = (TextView) view.findViewById(R.id.place_time);
+
     }
 
     /**
@@ -156,5 +171,17 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(17));
         }
 
+    }
+
+    public void showUserFeedbackNoTags() {
+        PlacesDAO db = new PlacesDAO(getActivity());
+        if(db.isEmpty())
+            action.setText(R.string.create_place_start);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showUserFeedbackNoTags();
     }
 }
