@@ -18,12 +18,20 @@ package es.oneoctopus.nfctimecontrol.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import es.oneoctopus.nfctimecontrol.R;
+import es.oneoctopus.nfctimecontrol.adapters.PlacesAdapter;
+import es.oneoctopus.nfctimecontrol.data.PlacesDAO;
+import es.oneoctopus.nfctimecontrol.decorators.DividerItemDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +39,9 @@ import es.oneoctopus.nfctimecontrol.R;
  * create an instance of this fragment.
  */
 public class PlacesFragment extends Fragment {
+    private PlacesDAO db;
+    private List<String> placesList;
+    private RecyclerView list;
 
     public PlacesFragment() {
         // Required empty public constructor
@@ -53,4 +64,19 @@ public class PlacesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_places, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        list = (RecyclerView) view.findViewById(R.id.places_list);
+        db = new PlacesDAO(getActivity());
+        placesList = db.getPlaceNames();
+
+        PlacesAdapter adapter = new PlacesAdapter(getActivity(), placesList);
+        list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        list.setHasFixedSize(true);
+        list.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
+        list.setAdapter(adapter);
+    }
 }
