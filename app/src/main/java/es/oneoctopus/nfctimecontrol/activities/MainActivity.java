@@ -189,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
                 if (name != null) {
                     PlacesDAO db = new PlacesDAO(this);
                     db.check(DateTime.now(), name);
-                    Toast.makeText(this, "NFC Tag read", Toast.LENGTH_LONG).show();
 
                 } else
                     Toast.makeText(MainActivity.this, R.string.error_reading_nfc_tag, Toast.LENGTH_LONG).show();

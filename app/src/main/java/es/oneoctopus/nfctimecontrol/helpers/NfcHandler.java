@@ -146,7 +146,8 @@ public class NfcHandler {
     }
 
     private String parse(IterableMessage message) {
-        if (message.size() == 0)
+        // Our tags only have 2 records
+        if (message.size() != 2)
             return null;
 
         List<Record> records = message.getAllRecords();

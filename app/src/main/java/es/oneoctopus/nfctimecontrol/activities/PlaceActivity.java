@@ -16,5 +16,22 @@
 
 package es.oneoctopus.nfctimecontrol.activities;
 
-public class PlaceActivity {
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import es.oneoctopus.nfctimecontrol.R;
+
+public class PlaceActivity extends AppCompatActivity {
+    String place;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_place);
+
+        if (getIntent().getExtras().getString("place") != null)
+            place = getIntent().getExtras().getString("place");
+
+
+    }
 }

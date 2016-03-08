@@ -17,6 +17,7 @@
 package es.oneoctopus.nfctimecontrol.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import java.util.List;
 
 import es.oneoctopus.nfctimecontrol.R;
+import es.oneoctopus.nfctimecontrol.activities.PlaceActivity;
 import es.oneoctopus.nfctimecontrol.data.PlacesDAO;
 
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder> {
@@ -102,7 +104,9 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
 
         @Override
         public void onClick(View v) {
-
+            Intent placeActivity = new Intent(context, PlaceActivity.class);
+            placeActivity.putExtra("place", items.get(getAdapterPosition()));
+            context.startActivity(placeActivity);
         }
 
         @Override

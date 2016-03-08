@@ -87,7 +87,6 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
         card = (CardView) view.findViewById(R.id.cardview);
         placeName = (TextView) view.findViewById(R.id.place_name);
         placeTime = (TextView) view.findViewById(R.id.place_time);
-
     }
 
     /**
@@ -177,6 +176,27 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
         PlacesDAO db = new PlacesDAO(getActivity());
         if(db.isEmpty())
             action.setText(R.string.create_place_start);
+        else{
+
+            List<String> openChecks = db.getOpenChecks();
+
+            if(openChecks != null){
+                StringBuilder placeNames = new StringBuilder();
+
+                for(String place : openChecks) {
+                    placeNames.append(place);
+                    placeNames.append(" ");
+                }
+
+                instructions.setVisibility(View.GONE);
+                card.setVisibility(View.VISIBLE);
+                placeName.setText(placeNames.toString());
+            } else{
+                card.setVisibility(View.GONE);
+                instructions.setVisibility(View.VISIBLE);
+            }
+
+        }
     }
 
     @Override
