@@ -22,7 +22,6 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.nfc.tech.NdefFormatable;
 import android.os.Parcelable;
 import android.widget.Toast;
 
@@ -45,20 +44,17 @@ public class NfcHandler {
         this.context = context;
     }
 
-    public Tag formatTag(Tag tag){
-        NdefFormatable formatableTag = NdefFormatable.get(tag);
-        if(formatableTag != null){
-            try{
-                NdefRecord emptyRecord = new NdefRecord(NdefRecord.TNF_EMPTY, null, null, null);
-                NdefMessage emptyMessage = new NdefMessage(emptyRecord);
-                formatableTag.connect();
-                formatableTag.format(emptyMessage);
-                return formatableTag.getTag();
-            } catch (FormatException | IOException e) {
+    public Tag eraseTag(Tag tag){
+        Ndef ndefTag = Ndef.get(tag);
+            try {
+                ndefTag.connect();
+                ndefTag.writeNdefMessage(new NdefMessage(new NdefRecord(NdefRecord.TNF_EMPTY, null, null, null)));
+                ndefTag.close();
+                return tag;
+            } catch (IOException | FormatException e) {
                 e.printStackTrace();
                 return null;
             }
-        } else return null;
     }
 
     /**
@@ -72,7 +68,7 @@ public class NfcHandler {
 
         // Check if the tag is formatted. If it is not, format it
         if(ndefTag == null)
-            ndefTag = Ndef.get(formatTag(tag));
+            ndefTag = Ndef.get(eraseTag(tag));
 
         // The format wasn't successful, so we abort the mission
         if(ndefTag == null)
@@ -133,12 +129,10 @@ public class NfcHandler {
                         message.add(Record.parse(record));
                     } catch (FormatException e) {
                         e.printStackTrace();
-                        // if record is unsuported or corrupted, keep it.
+                        // if record is unsupported or corrupted, keep it.
                         message.add(UnsupportedRecord.parse(record));
                     }
-
                 }
-
             }
             return parse(message);
         }else

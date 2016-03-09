@@ -19,6 +19,7 @@ package es.oneoctopus.nfctimecontrol.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.SQLException;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -31,7 +32,6 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,7 +50,7 @@ import es.oneoctopus.nfctimecontrol.other.Constants;
 public class MainActivityFragment extends Fragment implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
     private SupportMapFragment mapView;
     private Location loc;
-    private LinearLayout instructions;
+    private CardView instructions;
     private TextView action;
     private CardView card;
     private TextView placeName;
@@ -82,7 +82,7 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
         mapView = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_view);
         getLocationPermissions();
 
-        instructions = (LinearLayout) view.findViewById(R.id.instructions);
+        instructions = (CardView) view.findViewById(R.id.instructions);
         action = (TextView) view.findViewById(R.id.action);
         card = (CardView) view.findViewById(R.id.cardview);
         placeName = (TextView) view.findViewById(R.id.place_name);
@@ -191,6 +191,11 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
                 instructions.setVisibility(View.GONE);
                 card.setVisibility(View.VISIBLE);
                 placeName.setText(placeNames.toString());
+                try {
+                    placeTime.setText(String.format(getString(R.string.for_hours_minutes), db.getTimeInOpenCheck(openChecks.get(0))));
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
             } else{
                 card.setVisibility(View.GONE);
                 instructions.setVisibility(View.VISIBLE);
@@ -204,4 +209,5 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
         super.onResume();
         showUserFeedbackNoTags();
     }
+
 }

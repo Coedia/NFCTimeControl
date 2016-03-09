@@ -17,9 +17,9 @@
 <resources>
     <string name="app_name">NFCTimeControl</string>
     <string name="action_settings">Settings</string>
-    <string name="set_venues_name">Set a tag name...</string>
+    <string name="set_venues_name">Set a tag name…</string>
     <string name="insertplacename">Insert name here</string>
-    <string name="keepitshort">Keep it short! (i.e. Work, Mike\'s home...)</string>
+    <string name="keepitshort">Keep it short! (i.e. Work, Mike\'s home…)</string>
     <string name="done">Done</string>
     <string name="insert_valid_name">Insert a valid tag name</string>
     <string name="main">Main</string>
@@ -39,4 +39,6 @@
     <string name="for_hours_minutes">for %1$d minutes.</string>
     <string name="create_place_start">Write a tag to start</string>
     <string name="error_reading_nfc_tag">Incorrect or corrupted tag</string>
+    <string name="scan_to_erase">Scan the tag to erase it</string>
+    <string name="scan_to_write">Scan the tag to write the place</string>
 </resources>

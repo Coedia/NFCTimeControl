@@ -22,12 +22,16 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
@@ -53,12 +57,15 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
     private NfcHandler nfcHandler;
     private boolean erase;
     private Drawer drawer;
+    private CoordinatorLayout parentLayout;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        parentLayout = (CoordinatorLayout) findViewById(R.id.parent);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         nfcHandler = new NfcHandler(this);
@@ -131,7 +138,11 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
         //noinspection SimplifiableIfStatement
         if (id == R.id.erase_tag) {
             erase = true;
-            //TODO Show erase mode
+            snackbar = Snackbar.make(parentLayout, R.string.scan_to_erase, Snackbar.LENGTH_INDEFINITE);
+            // Set red background, white text
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.accent));
+            ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setTextColor(ContextCompat.getColor(this, R.color.md_white_1000));
+            snackbar.show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -180,10 +191,12 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
             if(!placeNameToWrite.equals("")) {
                 nfcHandler.writeTag(discoveredTag, placeNameToWrite);
                 placeNameToWrite = "";
+                snackbar.dismiss();
             }else if (erase){
                 // The user asked to erase the tag via the menu button
-                nfcHandler.formatTag(discoveredTag);
+                nfcHandler.eraseTag(discoveredTag);
                 erase = false;
+                snackbar.dismiss();
             }else {
                 String name = nfcHandler.readTag(intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES));
                 if (name != null) {
@@ -199,7 +212,8 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
     @Override
     public void setNameToWrite(String nameToWrite) {
         placeNameToWrite = nameToWrite;
+        snackbar = Snackbar.make(parentLayout, R.string.scan_to_write, Snackbar.LENGTH_INDEFINITE);
+        snackbar.show();
     }
-
 
 }

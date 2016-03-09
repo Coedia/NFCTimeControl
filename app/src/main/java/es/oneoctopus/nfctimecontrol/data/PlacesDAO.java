@@ -19,6 +19,7 @@ package es.oneoctopus.nfctimecontrol.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
@@ -118,10 +119,10 @@ public class PlacesDAO {
         cursor.close();
     }
 
-    public boolean isCheckOpen(String name) {
+    public boolean isCheckOpen(String place) {
         String[] columnsToReturn = { "id", "placename", "checkin", "checkout", "hours" };
-        String [] selectionCriteria = {name};
-        Cursor cursor = db.query("places", columnsToReturn, "placename=?", selectionCriteria, null, null, "id " + "DESC");
+        String [] selectionCriteria = {place};
+        Cursor cursor = db.query("places", columnsToReturn, "placename=?", selectionCriteria, null, null, "id DESC");
 
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -146,6 +147,22 @@ public class PlacesDAO {
                 result.add(cursor.getString(cursor.getColumnIndex("placename")));
             cursor.close();
             return result;
+        }
+    }
+
+    public long getTimeInOpenCheck(String place) throws SQLException{
+        String[] columnsToReturn = { "checkin" };
+        String[] selectionCriteria = { place };
+        Cursor cursor = db.query("places", columnsToReturn, "placename=?", selectionCriteria, null, null, "id DESC");
+        if(cursor.getColumnCount() < 1){
+            cursor.close();
+            return 0;
+        } else {
+            cursor.moveToFirst();
+            DateTime checkin = DateTime.parse(cursor.getString(cursor.getColumnIndex("checkin")));
+            cursor.close();
+            Minutes minutesBetween = Minutes.minutesBetween(checkin, DateTime.now());
+            return minutesBetween.getMinutes();
         }
     }
 }
