@@ -20,4 +20,6 @@
     <color name="colorPrimaryDark">#6c6c6c</color>
     <color name="colorAccent">#960002</color>
     <color name="semi_transparent_white">#96ffffff</color>
+
+    <color name="light_gray">#dcdcdc</color>
 </resources>

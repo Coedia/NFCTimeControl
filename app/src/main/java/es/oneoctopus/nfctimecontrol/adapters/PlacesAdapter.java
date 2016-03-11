@@ -53,7 +53,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.title.setText(items.get(position));
-        holder.subtitle.setText(String.format(context.getString(R.string.been_here_times), db.getVisits(items.get(position))));
+        holder.subtitle.setText(String.format(context.getResources().getQuantityString(R.plurals.been_here_times, ((Long) db.getVisits(items.get(position))).intValue()), db.getVisits(items.get(position))));
 
         TextDrawable initials = new TextDrawable.Builder()
                 .setHeight(dpToPx(48))

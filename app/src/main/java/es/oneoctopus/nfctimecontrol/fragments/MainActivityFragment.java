@@ -192,7 +192,7 @@ public class MainActivityFragment extends Fragment implements OnMapReadyCallback
                 card.setVisibility(View.VISIBLE);
                 placeName.setText(placeNames.toString());
                 try {
-                    placeTime.setText(String.format(getString(R.string.for_hours_minutes), db.getTimeInOpenCheck(openChecks.get(0))));
+                    placeTime.setText(String.format(getString(R.string.for_hours_minutes), db.getTimeInOpenCheck(openChecks.get(0))/60, db.getTimeInOpenCheck(openChecks.get(0))%60));
                 }catch (SQLException e){
                     e.printStackTrace();
                 }

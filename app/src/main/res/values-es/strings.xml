@@ -22,20 +22,18 @@
     <string name="erase_tag">Borrar etiqueta</string>
     <string name="insert_valid_name">Inserta un nombre de tag válido</string>
     <string name="insertplacename">Inserta un nombre aquí</string>
-    <string name="keepitshort">Que sea corto! (ej. Trabajo, Casa de Patricia...)</string>
+    <string name="keepitshort">Que sea corto! (ej. Trabajo, Casa de Patricia…)</string>
     <string name="main">Principal</string>
     <string name="nfc_tag_error_writing">Error escribiendo en la tag</string>
     <string name="nfc_tag_no_space">La tag no tiene espacio suficiente</string>
     <string name="nfc_tag_not_writable">La tag NFC no se puede escribir</string>
     <string name="nfc_tag_successful_write">Nombre registrado correctamente en la NFC tag</string>
     <string name="places">Lugares</string>
-    <string name="set_venues_name">Ponle un nombre...</string>
+    <string name="set_venues_name">Ponle un nombre…</string>
     <string name="stats">Estadísticas</string>
-    <string name="google_app_id"></string>
-    <string name="been_here_times">Has estado aquí %1$d veces</string>
     <string name="create_place_start">Crea una nueva tag para empezar</string>
     <string name="error_reading_nfc_tag">Tag incorrecta o corrupta</string>
-    <string name="for_hours_minutes">durante %1$d minutos.</string>
+    <string name="for_hours_minutes">durante %1$d horas y %2$d minutos.</string>
     <string name="scan_a_tag_nto_check_in">Escanea tag\npara hacer check in</string>
     <string name="youve_been_at">Llevas en</string>
 </resources>

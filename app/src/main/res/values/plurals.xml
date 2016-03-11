@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <plurals name="times_here">
+        <item quantity="one">%d time here</item>
+        <item quantity="other">%d times here</item>
+    </plurals>
+
+    <plurals name="been_here_times">
+        <item quantity="one">You\'ve been here %d time</item>
+        <item quantity="other">You\'ve been here %d times</item>
+    </plurals>
+
+</resources>

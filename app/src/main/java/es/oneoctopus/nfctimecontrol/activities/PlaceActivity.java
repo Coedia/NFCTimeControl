@@ -18,11 +18,16 @@ package es.oneoctopus.nfctimecontrol.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import es.oneoctopus.nfctimecontrol.R;
+import es.oneoctopus.nfctimecontrol.data.PlacesDAO;
 
 public class PlaceActivity extends AppCompatActivity {
-    String place;
+    private String place;
+    private TextView placeName;
+    private TextView timesHere;
+    private PlacesDAO db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,16 @@ public class PlaceActivity extends AppCompatActivity {
         if (getIntent().getExtras().getString("place") != null)
             place = getIntent().getExtras().getString("place");
 
+        placeName = (TextView) findViewById(R.id.place_name);
+        timesHere = (TextView) findViewById(R.id.times_here);
 
+        db = new PlacesDAO(this);
+
+        setPlaceInfo();
+    }
+
+    private void setPlaceInfo() {
+        placeName.setText(place);
+        timesHere.setText(getResources().getQuantityString(R.plurals.times_here, ((Long)db.getVisits(place)).intValue(), db.getVisits(place)));
     }
 }

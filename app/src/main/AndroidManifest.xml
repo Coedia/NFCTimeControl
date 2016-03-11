@@ -63,7 +63,9 @@
                 <data android:mimeType="application/es.oneoctopus.nfctimecontrol" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.PlaceActivity"></activity>
+        <activity
+            android:name=".activities.PlaceActivity"
+            android:parentActivityName=".activities.MainActivity"/>
     </application>
 
 </manifest>
