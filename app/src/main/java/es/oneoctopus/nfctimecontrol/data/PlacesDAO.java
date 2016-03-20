@@ -29,6 +29,8 @@ import org.joda.time.Minutes;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.oneoctopus.nfctimecontrol.models.Check;
+
 public class PlacesDAO {
     private String table;
     private Context context;
@@ -39,7 +41,7 @@ public class PlacesDAO {
     public PlacesDAO(Context context) {
         this.context = context;
         this.table = "places";
-        this.sql = new PlacesSql(context, "places", null, 1);
+        this.sql = new PlacesSql(context, "places", null, 10);
         this.db = this.sql.getWritableDatabase();
     }
 
@@ -67,7 +69,7 @@ public class PlacesDAO {
         return size == 0;
     }
 
-    public long getVisits(String place){
+    public long getVisitsCount(String place){
         String sql = "SELECT COUNT(*) FROM places WHERE placename = ?;";
         SQLiteStatement statement = db.compileStatement(sql);
         statement.bindString(1, place);
@@ -164,5 +166,31 @@ public class PlacesDAO {
             Minutes minutesBetween = Minutes.minutesBetween(checkin, DateTime.now());
             return minutesBetween.getMinutes();
         }
+    }
+
+    public List<Check> getChecksIn(String place){
+        List<Check> result = new ArrayList<>();
+
+        String[] columnsToReturn = { "checkin", "checkout", "hours" };
+        String[] selectionCriteria = { place };
+
+        Cursor cursor = db.query("places", columnsToReturn, "placename = ?", selectionCriteria, null, null, "id DESC");
+
+        while(cursor.moveToNext()) {
+            DateTime checkin = DateTime.parse(cursor.getString(cursor.getColumnIndex("checkin")));
+            DateTime checkout = DateTime.parse(cursor.getString(cursor.getColumnIndex("checkout")));
+            result.add(new Check(place, checkin, checkout, Minutes.minutesBetween(checkin, checkout).getMinutes()));
+        }
+
+        cursor.close();
+
+        return result;
+    }
+
+    public void delete(String place){
+        String sql = "DELETE FROM places WHERE placename = ?";
+        SQLiteStatement statement = db.compileStatement(sql);
+        statement.bindString(1, place);
+        statement.execute();
     }
 }

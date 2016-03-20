@@ -110,10 +110,11 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, StatsFragment.newInstance()).commit();
                                 break;
                             case 2:
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, PlacesFragment.newInstance()).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, PlacesFragment.newInstance(), "placesfragment").commit();
                             default:
                                 break;
                         }
+                        getSupportFragmentManager().executePendingTransactions();
                         drawer.closeDrawer();
                         return true;
                     }

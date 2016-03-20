@@ -42,6 +42,7 @@ public class PlacesFragment extends Fragment {
     private PlacesDAO db;
     private List<String> placesList;
     private RecyclerView list;
+    private PlacesAdapter adapter;
 
     public PlacesFragment() {
         // Required empty public constructor
@@ -72,11 +73,24 @@ public class PlacesFragment extends Fragment {
         db = new PlacesDAO(getActivity());
         placesList = db.getPlaceNames();
 
-        PlacesAdapter adapter = new PlacesAdapter(getActivity(), placesList);
+        adapter = new PlacesAdapter(getActivity(), placesList);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setHasFixedSize(true);
         list.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         list.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Refresh the list every time the fragment is shown again to reflect changes in case
+        // a place is deleted from its activity
+        // TODO change this, probably better ways to implement it
+
+        if(adapter != null)
+            adapter.replaceData(db.getPlaceNames()
+            );
     }
 }

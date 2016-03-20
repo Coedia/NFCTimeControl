@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 
+import java.io.Serializable;
 import java.util.List;
 
 import es.oneoctopus.nfctimecontrol.R;
@@ -53,7 +54,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.title.setText(items.get(position));
-        holder.subtitle.setText(String.format(context.getResources().getQuantityString(R.plurals.been_here_times, ((Long) db.getVisits(items.get(position))).intValue()), db.getVisits(items.get(position))));
+        holder.subtitle.setText(String.format(context.getResources().getQuantityString(R.plurals.been_here_times, ((Long) db.getVisitsCount(items.get(position))).intValue()), db.getVisitsCount(items.get(position))));
 
         TextDrawable initials = new TextDrawable.Builder()
                 .setHeight(dpToPx(48))
@@ -77,7 +78,10 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             return ContextCompat.getColor(context, R.color.primary_dark);
     }
 
-
+    public void replaceData(List<String> newItems){
+        this.items = newItems;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
@@ -106,6 +110,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         public void onClick(View v) {
             Intent placeActivity = new Intent(context, PlaceActivity.class);
             placeActivity.putExtra("place", items.get(getAdapterPosition()));
+            placeActivity.putExtra("position", getAdapterPosition());
             context.startActivity(placeActivity);
         }
 
