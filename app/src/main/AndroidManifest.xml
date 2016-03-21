@@ -14,7 +14,7 @@
   ~ limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="es.oneoctopus.nfctimecontrol">
+    package="com.naroh.nfctimecontrol">
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -60,7 +60,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="application/es.oneoctopus.nfctimecontrol" />
+                <data android:mimeType="application/com.naroh.nfctimecontrol" />
             </intent-filter>
         </activity>
         <activity
