@@ -17,6 +17,7 @@
 package com.naroh.nfctimecontrol.activities;
 
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
@@ -26,6 +27,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -38,9 +40,6 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-
-import org.joda.time.DateTime;
-
 import com.naroh.nfctimecontrol.R;
 import com.naroh.nfctimecontrol.data.PlacesDAO;
 import com.naroh.nfctimecontrol.dialogs.NewTagDialog;
@@ -49,6 +48,8 @@ import com.naroh.nfctimecontrol.fragments.PlacesFragment;
 import com.naroh.nfctimecontrol.fragments.StatsFragment;
 import com.naroh.nfctimecontrol.helpers.NfcHandler;
 import com.naroh.nfctimecontrol.helpers.SPHelper;
+
+import org.joda.time.DateTime;
 
 public class MainActivity extends AppCompatActivity implements NewTagDialog.WriteToNFC{
 
@@ -88,6 +89,27 @@ public class MainActivity extends AppCompatActivity implements NewTagDialog.Writ
                 dialog.show(getSupportFragmentManager(), "newtag");
             }
         });
+
+        updateWarning();
+    }
+
+    private void updateWarning() {
+        if(SPHelper.getBoolean(this, "warn_update", true)){
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.coming_old_version_warning))
+                    .setMessage(getString(R.string.coming_old_version_text))
+                    .setPositiveButton(getString(R.string.gotit), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            builder.create().show();
+
+            SPHelper.putBoolean(this, "warn_update", false);
+        }
     }
 
     private void initializeNavigationDrawer(Toolbar toolbar) {

@@ -45,7 +45,7 @@ public class PlacesDAO {
     public PlacesDAO(Context context) {
         this.context = context;
         this.table = "places";
-        this.sql = new PlacesSql(context, "places", null, 10);
+        this.sql = new PlacesSql(context, "places", null, 20);
         this.db = this.sql.getWritableDatabase();
     }
 
@@ -91,7 +91,7 @@ public class PlacesDAO {
 
     public void check(DateTime date, String place) {
 
-        String[] columnsToReturn = { "id", "placename", "checkin", "checkout" };
+        String[] columnsToReturn = { "id", "placename", "indate", "outdate" };
         String [] selectionCriteria = {place};
         Cursor cursor = db.query("places", columnsToReturn, "placename=?", selectionCriteria, null, null, "id DESC");
 
@@ -101,7 +101,7 @@ public class PlacesDAO {
 
             // If there is a checkout date stored in the db, register the checkout
             cursor.moveToFirst();
-            if(cursor.getString(cursor.getColumnIndex("checkout")) == null) {
+            if(cursor.getString(cursor.getColumnIndex("outdate")) == null) {
                 // No checkout registry, open checkin
                 openCheck = true;
             }
@@ -118,7 +118,7 @@ public class PlacesDAO {
     }
 
     private void registerCheckIn(DateTime date, String place) {
-        String sql = "INSERT INTO places (placename, checkin) VALUES (?, ?);";
+        String sql = "INSERT INTO places (placename, indate) VALUES (?, ?);";
         SQLiteStatement statement = db.compileStatement(sql);
         statement.bindString(1, place);
         statement.bindString(2, date.toString());
@@ -127,9 +127,9 @@ public class PlacesDAO {
 
     private void registerCheckOut(DateTime date, String place, Cursor cursor) {
         cursor.moveToFirst();
-        DateTime checkinDate = new DateTime(cursor.getString(cursor.getColumnIndex("checkin")));
+        DateTime checkinDate = new DateTime(cursor.getString(cursor.getColumnIndex("indate")));
         Minutes minutes = Minutes.minutesBetween(checkinDate, date);
-        String sql = ("UPDATE places SET checkout = ? WHERE placename = ?;");
+        String sql = ("UPDATE places SET outdate = ? WHERE placename = ?;");
         SQLiteStatement statement = db.compileStatement(sql);
         statement.bindString(1, date.toString());
         statement.bindString(2, place);
@@ -138,13 +138,13 @@ public class PlacesDAO {
     }
 
     public boolean isCheckOpen(String place) {
-        String[] columnsToReturn = { "id", "placename", "checkin", "checkout" };
+        String[] columnsToReturn = { "id", "placename", "indate", "outdate" };
         String [] selectionCriteria = {place};
         Cursor cursor = db.query("places", columnsToReturn, "placename=?", selectionCriteria, null, null, "id DESC");
 
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-            String checkOutDate = cursor.getString(cursor.getColumnIndex("checkout"));
+            String checkOutDate = cursor.getString(cursor.getColumnIndex("outdate"));
             cursor.close();
             return checkOutDate == null;
         } else{
@@ -155,7 +155,7 @@ public class PlacesDAO {
 
     public List<String> getOpenChecks(){
         String[] columnsToReturn = { "placename" };
-        Cursor cursor = db.query("places", columnsToReturn, "checkout is null or checkout = ?", new String[] {}, null, null, null);
+        Cursor cursor = db.query("places", columnsToReturn, "outdate is null or outdate = ?", new String[] {}, null, null, null);
         if(cursor.getCount() < 1) {
             cursor.close();
             return null;
@@ -169,7 +169,7 @@ public class PlacesDAO {
     }
 
     public long getTimeInOpenCheck(String place) throws SQLException{
-        String[] columnsToReturn = { "checkin" };
+        String[] columnsToReturn = { "indate" };
         String[] selectionCriteria = { place };
         Cursor cursor = db.query("places", columnsToReturn, "placename=?", selectionCriteria, null, null, "id DESC");
         if(cursor.getColumnCount() < 1){
@@ -177,7 +177,7 @@ public class PlacesDAO {
             return 0;
         } else {
             cursor.moveToFirst();
-            DateTime checkin = DateTime.parse(cursor.getString(cursor.getColumnIndex("checkin")));
+            DateTime checkin = DateTime.parse(cursor.getString(cursor.getColumnIndex("indate")));
             cursor.close();
             Minutes minutesBetween = Minutes.minutesBetween(checkin, DateTime.now());
             return minutesBetween.getMinutes();
@@ -187,14 +187,14 @@ public class PlacesDAO {
     public List<Check> getChecksIn(String place){
         List<Check> result = new ArrayList<>();
 
-        String[] columnsToReturn = { "checkin", "checkout" };
+        String[] columnsToReturn = { "indate", "outdate" };
         String[] selectionCriteria = { place };
 
         Cursor cursor = db.query("places", columnsToReturn, "placename = ?", selectionCriteria, null, null, "id DESC");
 
         while(cursor.moveToNext()) {
-            DateTime checkin = DateTime.parse(cursor.getString(cursor.getColumnIndex("checkin")));
-            DateTime checkout = DateTime.parse(cursor.getString(cursor.getColumnIndex("checkout")));
+            DateTime checkin = DateTime.parse(cursor.getString(cursor.getColumnIndex("indate")));
+            DateTime checkout = DateTime.parse(cursor.getString(cursor.getColumnIndex("outdate")));
             result.add(new Check(place, checkin, checkout, Minutes.minutesBetween(checkin, checkout).getMinutes()));
         }
 

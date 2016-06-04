@@ -42,4 +42,7 @@
     <string name="scan_to_write">Scan the tag to write the place</string>
     <string name="delete_place">Delete place</string>
     <string name="graph_legend">% of all checks</string>
+    <string name="coming_old_version_warning">Coming from and old version?</string>
+    <string name="coming_old_version_text">NFCTimeControl version 2 uses a new type of NFC message that comes with the latests versions of Android. If you have been using this app before v2 you must re-write your NFC tags again in order to make them compatible. Sorry about that, but it\'s for the best!</string>
+    <string name="gotit">Got it</string>
 </resources>

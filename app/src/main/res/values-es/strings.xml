@@ -40,4 +40,7 @@
     <string name="delete_place">Eliminar lugar</string>
     <string name="scan_to_erase">Escanea una tag para eliminar lugar</string>
     <string name="scan_to_write">Escanea una tag para crear un lugar</string>
+    <string name="coming_old_version_warning">¿Vienes de una versión anterior?</string>
+    <string name="coming_old_version_text">La versión 2 de NFCTimeControl utiliza un nuevo tipo de mensaje NFC disponible en las últimas versiones de Android. Si usas NFCTimeControl desde antes de su versión 2 debes crear de nuevo tus tags NFC para que sean compatibles. Sentimos las molestias.</string>
+    <string name="gotit">Vale</string>
 </resources>
