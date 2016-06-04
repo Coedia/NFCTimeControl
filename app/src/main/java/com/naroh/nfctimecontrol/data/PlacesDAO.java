@@ -194,8 +194,12 @@ public class PlacesDAO {
 
         while(cursor.moveToNext()) {
             DateTime checkin = DateTime.parse(cursor.getString(cursor.getColumnIndex("indate")));
-            DateTime checkout = DateTime.parse(cursor.getString(cursor.getColumnIndex("outdate")));
-            result.add(new Check(place, checkin, checkout, Minutes.minutesBetween(checkin, checkout).getMinutes()));
+            if(cursor.getString(cursor.getColumnIndex("outdate")) != null) {
+                DateTime checkout = DateTime.parse(cursor.getString(cursor.getColumnIndex("outdate")));
+                result.add(new Check(place, checkin, checkout, Minutes.minutesBetween(checkin, checkout).getMinutes()));
+            }else{
+                result.add(new Check(place, checkin, null, null));
+            }
         }
 
         cursor.close();

@@ -6,9 +6,9 @@ public class Check {
     private String placeName;
     private DateTime checkIn;
     private DateTime checkOut;
-    private int hours;
+    private Integer hours;
 
-    public Check(String placeName, DateTime checkIn, DateTime checkOut, int hours) {
+    public Check(String placeName, DateTime checkIn, DateTime checkOut, Integer hours) {
         this.placeName = placeName;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
