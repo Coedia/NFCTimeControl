@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,10 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.naroh.nfctimecontrol.R;
+import com.naroh.nfctimecontrol.data.PlacesDAO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +47,8 @@ import java.util.ArrayList;
  */
 public class StatsFragment extends Fragment {
     private PieChart chart;
+    private List<Pair<String, Integer>> places;
+    private int total;
 
     public StatsFragment() {
         // Required empty public constructor
@@ -70,6 +75,10 @@ public class StatsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        PlacesDAO dao = new PlacesDAO(getActivity());
+        places = dao.getAllChecks();
+        total = dao.getCheckCount();
+
         chart = (PieChart) view.findViewById(R.id.pie_chart);
         chart.setUsePercentValues(true);
         chart.setDescription("");
@@ -92,7 +101,7 @@ public class StatsFragment extends Fragment {
         chart.setRotationEnabled(true);
         chart.setHighlightPerTapEnabled(true);
 
-        setData(3, 100);
+        setData();
 
         chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
         // mChart.spin(2000, 0, 360);
@@ -104,25 +113,25 @@ public class StatsFragment extends Fragment {
         l.setYOffset(0f);
     }
 
-    private void setData(int count, float range) {
-
-        float mult = range;
+    private void setData() {
 
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 
         // IMPORTANT: In a PieChart, no values (Entry) should have the same
         // xIndex (even if from different DataSets), since no values can be
         // drawn above each other.
-        for (int i = 0; i < count + 1; i++) {
-            yVals1.add(new Entry((float) (Math.random() * mult) + mult / 5, i));
+        int cont = 0;
+        for(Pair<String, Integer> place: places){
+            yVals1.add(new Entry((float) (place.second*100)/total, cont++));
         }
 
         ArrayList<String> xVals = new ArrayList<String>();
+        cont = 0;
+        for (Pair<String, Integer> place: places) {
+            xVals.add(cont++, place.first);
+        }
 
-        for (int i = 0; i < count + 1; i++)
-            xVals.add(0, "a");
-
-        PieDataSet dataSet = new PieDataSet(yVals1, "Election Results");
+        PieDataSet dataSet = new PieDataSet(yVals1, getString(R.string.graph_legend));
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
 
@@ -130,13 +139,13 @@ public class StatsFragment extends Fragment {
 
         ArrayList<Integer> colors = new ArrayList<Integer>();
 
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+
         for (int c : ColorTemplate.VORDIPLOM_COLORS)
             colors.add(c);
 
         for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.COLORFUL_COLORS)
             colors.add(c);
 
         for (int c : ColorTemplate.LIBERTY_COLORS)

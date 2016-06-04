@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -32,8 +32,8 @@ android {
         applicationId "com.naroh.nfctimecontrol"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 10
+        versionName "2.0"
         multiDexEnabled true
         testInstrumentationRunner "com.naroh.nfctimecontrol.other.MultiDexAndroidJUnitRunner"
         testHandleProfiling true

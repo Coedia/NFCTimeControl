@@ -36,4 +36,8 @@
     <string name="for_hours_minutes">durante %1$d horas y %2$d minutos.</string>
     <string name="scan_a_tag_nto_check_in">Escanea tag\npara hacer check in</string>
     <string name="youve_been_at">Llevas en</string>
+    <string name="graph_legend">Leyenda</string>
+    <string name="delete_place">Eliminar lugar</string>
+    <string name="scan_to_erase">Escanea una tag para eliminar lugar</string>
+    <string name="scan_to_write">Escanea una tag para crear un lugar</string>
 </resources>

@@ -22,14 +22,18 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Pair;
+
+import com.naroh.nfctimecontrol.models.Check;
 
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-
-import com.naroh.nfctimecontrol.models.Check;
+import java.util.Set;
 
 public class PlacesDAO {
     private String table;
@@ -62,6 +66,15 @@ public class PlacesDAO {
         return size;
     }
 
+    public int getCheckCount(){
+        String sql = "SELECT placename FROM places;";
+        SQLiteStatement statement = db.compileStatement(sql);
+        Cursor cursor = db.query(true, "places", new String[] {"placename"}, "", null, null, null, null, null);
+        int size = cursor.getCount();
+        cursor.close();
+        return size;
+    }
+
     public boolean isEmpty(){
         Cursor cursor  = db.rawQuery("SELECT * FROM places", null);
         int size = cursor.getCount();
@@ -77,7 +90,11 @@ public class PlacesDAO {
     }
 
     public void check(DateTime date, String place) {
-        Cursor cursor = db.rawQuery("SELECT * FROM places WHERE placename = '" + place + "'  ORDER BY id DESC", null);
+
+        String[] columnsToReturn = { "id", "placename", "checkin", "checkout" };
+        String [] selectionCriteria = {place};
+        Cursor cursor = db.query("places", columnsToReturn, "placename=?", selectionCriteria, null, null, "id DESC");
+
         if (cursor.getCount() > 0) {
             // Get if there is neccesary to open a checkin or just close it
             boolean openCheck = false;
@@ -191,5 +208,23 @@ public class PlacesDAO {
         SQLiteStatement statement = db.compileStatement(sql);
         statement.bindString(1, place);
         statement.execute();
+    }
+
+    public List<Pair<String, Integer>> getAllChecks(){
+        String[] columnsToReturn = { "placename" };
+        Cursor cursor = db.query("places", columnsToReturn, null, null, null, null, null);
+
+        List<String> places = new ArrayList<>();
+        while(cursor.moveToNext()){
+            places.add(cursor.getString(cursor.getColumnIndex("placename")));
+        }
+        cursor.close();
+
+        Set<String> resultsSet= new HashSet<String>(places);
+        List<Pair<String, Integer>> results = new ArrayList<>();
+        for (String place : resultsSet) {
+            results.add(new Pair(place, Collections.frequency(places, place)));
+        }
+        return results;
     }
 }
